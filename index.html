@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Volleyball Work Team Randomizer by Storm Volleyball</title>
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#1F4FA3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Work Team">
+<meta name="description" content="Free app from Storm Volleyball that randomly assigns work-team jobs (lines, book, flip, libero tracker) at volleyball tournaments.">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--court:#1F4FA3;--maple:#B31942;--maple-soft:#E7EDF8;--ink:#16233B;--net:#B31942;--bg:#F5F7FB;--card:#FFFFFF;--muted:#5B6781;--taken:#D8DEEA;--hi:#1F4FA3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1A2E;--card:#18263F;--ink:#EEF2FA;--muted:#A3B0C8;--maple-soft:#2A3550;--taken:#2B3A57;--hi:#9DB8EC}}
+:root[data-theme="dark"]{--bg:#0F1A2E;--card:#18263F;--ink:#EEF2FA;--muted:#A3B0C8;--maple-soft:#2A3550;--taken:#2B3A57;--hi:#9DB8EC}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,-apple-system,sans-serif}
+header{background:var(--court);color:#fff;padding:18px 18px 0;border-bottom:6px solid var(--maple)}
+h1{font:800 clamp(2rem,7vw,2.5rem)/1 "Barlow Condensed",Impact,sans-serif;margin:0;text-wrap:balance}
+.teambar{display:flex;gap:8px;margin-top:14px}.teambar select,.teambar input{flex:1;font:600 1.05rem Barlow,sans-serif;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,.15);color:#fff}.teambar input::placeholder{color:rgba(255,255,255,.7)}.teambar select option{color:#16233B}
+.brand{text-align:center}.brand .eyebrow{margin:0 0 4px;color:#DDE8FB;font:600 .76rem/1.1 Barlow,sans-serif;letter-spacing:.18em;text-transform:uppercase}.brand a{display:inline-block;margin-top:7px;color:#fff;opacity:.88;font-size:.84rem;text-decoration:underline;text-underline-offset:3px}
+.promo{background:var(--court);color:#fff;border:0}.promo h2{color:#fff}.promo p{margin:0 0 12px;opacity:.9}.promo a.btn{display:block;text-align:center;text-decoration:none;background:var(--net);color:#fff;margin-bottom:8px}.socials{display:flex;gap:8px;flex-wrap:wrap}.socials a{flex:1;text-align:center;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:10px;padding:8px 4px;text-decoration:none;font-weight:600;font-size:.9rem}
+footer{text-align:center;color:var(--muted);font-size:.88rem;padding:8px 16px 28px}footer a{color:inherit}
+nav{display:flex;gap:4px;margin-top:12px}
+nav button{flex:1;border:0;background:transparent;color:#fff;opacity:.7;padding:10px 4px;font:600 1rem Barlow,sans-serif;border-radius:10px 10px 0 0}
+nav button.on{background:#fff;color:var(--court);opacity:1}
+main{max-width:620px;margin:0 auto;padding:16px}
+section{background:var(--card);border-radius:14px;padding:16px;margin-bottom:16px;border:1px solid var(--taken)}
+h2{font:800 1.5rem/1.1 "Barlow Condensed",sans-serif;margin:0 0 6px}
+.hint{color:var(--muted);font-size:.92rem;margin:0 0 12px}
+input{font:inherit;padding:10px;border-radius:10px;border:1px solid var(--taken);background:var(--bg);color:var(--ink);min-width:0}
+.add{display:flex;gap:8px;margin-bottom:10px}.add .jn{width:70px}.add .nm{flex:1}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 1rem Barlow,sans-serif;background:var(--court);color:#fff}
+.ghost{background:transparent;border:1px solid var(--taken);color:var(--ink)}
+.big{width:100%;padding:15px;background:var(--net);font:800 1.45rem "Barlow Condensed",sans-serif}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--taken)}
+.jersey{min-width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--court);color:#fff;font:800 1.2rem "Barlow Condensed",sans-serif}
+.list .name{flex:1;font-weight:600}
+.x{border:0;background:transparent;color:var(--muted);font-size:1.3rem;padding:6px 10px}
+.toggle{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.9rem}
+.toggle input{width:22px;height:22px;accent-color:var(--court)}
+.absent .name,.absent .jersey{opacity:.35}
+.jobrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--taken)}
+.jobrow input.jl{flex:1}.mode{border:1px solid var(--taken);background:var(--maple-soft);color:var(--ink);border-radius:9px;padding:7px 8px;font:600 .8rem Barlow,sans-serif;white-space:nowrap}.jobrow{flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:4px}
+.step button{width:36px;height:36px;border-radius:9px;border:0;background:var(--maple-soft);color:var(--ink);font-size:1.2rem;font-weight:700}
+.step output{min-width:22px;text-align:center;font:800 1.3rem "Barlow Condensed",sans-serif}
+.tally{margin:12px 0;padding:10px 12px;border-radius:10px;background:var(--maple-soft);font-size:.95rem}
+.tally.warn{background:#FBE3E1;color:#7A1C16}
+.suggestion{margin:12px 0;padding:12px;border:1px solid var(--taken);border-radius:10px;background:var(--maple-soft)}
+.suggestion p{margin:0 0 10px}
+.names{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pick{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;border:2px solid var(--taken);background:var(--card);color:var(--ink);font:600 1.05rem Barlow,sans-serif;text-align:left}
+.pick .jersey{min-width:36px;height:36px;font-size:1rem}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.num{aspect-ratio:1;border:0;border-radius:50%;background:var(--court);color:#fff;font:800 2.1rem "Barlow Condensed",sans-serif}
+.who{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.game h3{font:800 1.2rem "Barlow Condensed",sans-serif;margin:14px 0 4px;color:var(--hi)}
+.game li{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--taken)}
+.game ul{list-style:none;margin:0;padding:0}
+.row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+dialog{border:0;border-radius:18px;padding:0;max-width:340px;width:90%;background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(10,20,40,.65)}
+.reveal{background:var(--court);color:#fff;text-align:center;padding:22px 16px;border-bottom:6px solid var(--maple)}
+.reveal .n{font:800 1.2rem "Barlow Condensed",sans-serif;opacity:.85}
+.reveal .job{font:800 2.6rem/1.05 "Barlow Condensed",sans-serif;margin-top:6px}
+.dbody{padding:16px}
+.hidden{display:none!important}
+.prow{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--taken)}.prow span{flex:1;font-weight:600}.prow select{font:inherit;padding:8px;border-radius:9px;border:1px solid var(--taken);background:var(--card);color:var(--ink);max-width:55%}.prow select.set{border-color:var(--court);border-width:2px}
+.empty{color:var(--muted);text-align:center;padding:16px 0}
+@media (prefers-reduced-motion:no-preference){dialog[open] .reveal{animation:pop .35s ease-out}@keyframes pop{from{transform:scale(.85);opacity:0}}}
+button:focus-visible,input:focus-visible{outline:3px solid var(--net);outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><p class="eyebrow">Volleyball</p><h1>Work Team Randomizer</h1><a href="https://www.ccstormvolleyball.com?utm_source=workteam&utm_medium=app&utm_campaign=header" target="_blank" rel="noopener">by Storm Performance Volleyball</a></div>
+  <div class="teambar"><select id="teamSel" aria-label="Team"></select></div>
+  <div class="teambar hidden" id="newTeamRow"><input id="newTeamName" placeholder="Team name, e.g. 14U Black"><button class="btn" id="newTeamSave" style="background:#fff;color:var(--court)">Create</button><button class="btn" id="newTeamCancel" style="background:transparent">Cancel</button></div>
+  <nav>
+    <button data-tab="team">1. Team</button>
+    <button data-tab="jobs">2. Jobs</button>
+    <button data-tab="draw">3. Draw</button>
+  </nav>
+</header>
+<main>
+
+<!-- TEAM -->
+<div id="tab-team" class="hidden">
+<section>
+  <label class="hint" for="teamName" style="display:block;margin-bottom:4px">Team name</label>
+  <input id="teamName" style="width:100%;margin-bottom:14px;font-weight:600">
+  <h2>Your roster</h2>
+  <p class="hint">Saved on this phone. Uncheck anyone who isn't at the tournament.</p>
+  <div class="add"><input class="jn" id="newNum" inputmode="numeric" placeholder="#"><input class="nm" id="newName" placeholder="Player name"><button class="btn" id="addBtn">Add</button></div>
+  <ul class="list" id="roster"></ul>
+</section>
+<section>
+  <h2>Manage this team</h2>
+  <p class="hint">Switch teams with the menu at the top. These buttons only affect the team you're on.</p>
+  <div class="row2">
+    <button class="btn ghost" id="clearRoster" style="flex:1">Clear all players</button>
+    <button class="btn ghost" id="delTeam" style="flex:1;color:var(--net);border-color:var(--net)">Delete this team</button>
+  </div>
+</section>
+</div>
+
+<!-- JOBS -->
+<div id="tab-jobs" class="hidden">
+<section>
+  <h2>Jobs to hand out</h2>
+  <p class="hint">"Each set" gives the job to a different girl each set. "Whole match" keeps one girl on that job for the match. You choose how each job works.</p>
+  <div class="jobrow"><span style="flex:1;font-weight:600">Sets to cover</span><div class="step"><button id="gM">−</button><output id="gOut"></output><button id="gP">+</button></div></div>
+  <div id="jobList"></div>
+  <div class="row2"><button class="btn ghost" id="addJob">Add a job</button><button class="btn ghost" id="resetJobs">Reset to default</button></div>
+</section>
+</div>
+
+<!-- DRAW -->
+<div id="tab-draw" class="hidden">
+<section id="startBox">
+  <h2>Start a draw</h2>
+  <div id="tally" class="tally"></div>
+  <div id="fitSuggestion" class="suggestion hidden"><p id="fitText"></p><button class="btn" id="applyFit">Use this setup</button></div>
+  <h3 style="font:800 1.2rem 'Barlow Condensed',sans-serif;margin:4px 0 2px">Coach picks (optional)</h3>
+  <p class="hint">Choose a girl for any job you want to decide yourself. Everything left on "Random" gets drawn.</p>
+  <div id="presetBox"></div>
+  <div id="mixBox" class="hidden" style="margin-top:14px">
+    <h3 style="font:800 1.2rem 'Barlow Condensed',sans-serif;margin:0 0 2px">Second match?</h3>
+    <label class="jobrow" style="gap:10px;border-top:0"><input type="checkbox" id="mixToggle" style="width:22px;height:22px;accent-color:var(--court)"><span style="flex:1"><b>Mix it up from last match</b><br><span class="hint" style="margin:0" id="mixHint"></span></span></label>
+  </div>
+  <div style="height:12px"></div>
+  <button class="btn big" id="startBtn">Shuffle &amp; start</button>
+</section>
+
+<section id="pickName" class="hidden">
+  <h2>Who's up?</h2>
+  <p class="hint">Tap your name.</p>
+  <div class="names" id="nameGrid"></div>
+  <div class="row2"><button class="btn ghost hidden" id="undoBtn1">Undo last pick</button></div>
+</section>
+
+<section id="pickNum" class="hidden">
+  <div class="who"><span class="jersey" id="whoNum"></span><h2 id="whoName" style="margin:0"></h2></div>
+  <p class="hint">Pick a number. Nobody knows what's behind it, not even the coach.</p>
+  <div class="grid" id="numGrid"></div>
+  <div class="row2"><button class="btn ghost" id="backBtn">Not me, go back</button></div>
+</section>
+
+<section id="results" class="hidden game">
+  <h2>Schedule</h2>
+  <div id="resultList"></div>
+  <button class="btn big" id="shareSched" style="font-size:1.25rem;padding:13px;background:var(--court)">Send schedule to the team</button>
+  <div class="row2"><button class="btn ghost" id="undoBtn2">Undo last pick</button><button class="btn ghost" id="newDraw">New draw</button></div>
+</section>
+<section class="promo hidden" id="promo">
+  <h2>Got a few minutes before your match?</h2>
+  <p>Free drills and tips from Storm Performance Volleyball, home to 55+ college athletes.</p>
+  <a class="btn" href="https://www.ccstormvolleyball.com/training-videos?utm_source=workteam&utm_medium=app&utm_campaign=done" target="_blank" rel="noopener">Watch free training videos</a>
+  <div class="socials">
+    <a href="https://www.instagram.com/ccstormvolleyball" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@ccstormvolleyball" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.youtube.com/channel/UC_eVFOJBqSY1fWnmVJR2eWA" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</section>
+</div>
+
+</main>
+<footer>
+  <button class="btn ghost" id="shareBtn" style="width:100%;max-width:588px;margin-bottom:12px">Share the Randomizer with another coach</button>
+  <div>Free from <a href="https://www.ccstormvolleyball.com?utm_source=workteam&utm_medium=app&utm_campaign=footer" target="_blank" rel="noopener">Storm Performance Volleyball</a>, Corpus Christi, TX</div>
+</footer>
+
+<dialog id="dlg">
+  <div class="reveal"><div class="n" id="dWho"></div><div class="job" id="dJob"></div></div>
+  <div class="dbody"><button class="btn big" id="dOk" style="font-size:1.2rem;padding:12px">Got it</button></div>
+</dialog>
+
+<script>
+const KEY='dutydraw-v2';
+const DEFAULT_JOBS=[
+  {label:'Book',count:1,perGame:false},{label:'Flip',count:1,perGame:false},
+  {label:'Libero tracker',count:1,perGame:false},{label:'Lines',count:2,perGame:true}
+];
+const DEFAULT_ROSTER=[];
+const freshJobs=()=>DEFAULT_JOBS.map(j=>({...j,id:crypto.randomUUID()}));
+const blankTeam=(name,roster=[])=>({id:crypto.randomUUID(),name,preset:{},roster,jobs:freshJobs(),games:3,draw:null});
+const GKEY='dutydraw-teams';
+let G=null;
+try{G=JSON.parse(localStorage.getItem(GKEY)||'null')}catch(e){}
+if(!G){ // first run, or bring over the single team saved by the earlier version
+  let old=null;try{old=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+  const t=blankTeam('My Team',DEFAULT_ROSTER);
+  if(old){Object.assign(t,old);t.name='My Team';if(!t.jobs||t.jobs.some(j=>j.perGame===undefined))t.jobs=freshJobs()}
+  G={teams:[t],active:t.id};
+}
+G.teams.forEach(t=>{t.preset=t.preset||{};if(!Array.isArray(t.jobs))t.jobs=freshJobs();t.jobs.forEach(j=>{if(!j.id)j.id=crypto.randomUUID()})});
+let S=G.teams.find(t=>t.id===G.active)||G.teams[0];
+const save=()=>{try{localStorage.setItem(GKEY,JSON.stringify(G))}catch(e){}};
+save();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rnd=n=>Math.floor(crypto.getRandomValues(new Uint32Array(1))[0]/2**32*n);
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const here=()=>S.roster.filter(p=>p.here);
+
+/* tabs */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+  ['draw','team','jobs'].forEach(t=>$('tab-'+t).classList.toggle('hidden',t!==b.dataset.tab));
+  render();
+});
+
+let current=null;
+/* two-tap confirm (pop-up dialogs are blocked in some viewers) */
+function confirmTap(btn,msg,fn){
+  if(btn.dataset.armed){clearTimeout(btn._t);delete btn.dataset.armed;btn.textContent=btn._orig;fn();return}
+  btn._orig=btn.textContent;btn.dataset.armed=1;btn.textContent=msg;
+  btn._t=setTimeout(()=>{delete btn.dataset.armed;btn.textContent=btn._orig},3000);
+}
+/* slots */
+function slotSpecs(jobs){
+  const out=[];
+  jobs.forEach(j=>{for(let i=0;i<j.count;i++){
+    const name=j.count>1?(/^(lines?)$/i.test(j.label.trim())?`Line ${i+1}`:`${j.label} ${i+1}`):j.label;
+    if(j.perGame)for(let g=1;g<=S.games;g++)out.push({key:`${j.id}:${i}:${g}`,label:`${j.label} – Set ${g}`,display:`${name} – Set ${g}`});
+    else out.push({key:`${j.id}:${i}:all`,label:j.label,display:name});
+  }});
+  return out;
+}
+const slotsFor=jobs=>slotSpecs(jobs).map(s=>s.label);
+function syncPresets(specs,hp){
+  const keys=new Set(specs.map(s=>s.key));
+  Object.entries(S.preset).forEach(([key,id])=>{
+    if(keys.has(key))return;
+    const label=key.replace(/ – Game (\d+)$/,' – Set $1');
+    const slot=specs.find(s=>s.label===label&&!S.preset[s.key]);
+    if(slot)S.preset[slot.key]=id;
+    delete S.preset[key];
+  });
+  Object.keys(S.preset).forEach(key=>{if(!keys.has(key)||!hp.some(p=>p.id===S.preset[key]))delete S.preset[key]});
+}
+// Offer a coach-controlled adjustment using only Lines and Flip. Book and Libero stay as configured.
+function suggestFit(n){
+  if(n<1)return null;
+  const eligible=S.jobs.map((j,i)=>/^(lines?|flip)$/i.test(j.label.trim())?i:-1).filter(i=>i>=0);
+  const current=slotsFor(S.jobs).length;
+  let best=null;
+  for(let mask=1;mask<2**eligible.length;mask++){
+    const jobs=S.jobs.map(j=>({...j})),changes=[];
+    eligible.forEach((i,k)=>{if(mask&(1<<k)){jobs[i].perGame=!jobs[i].perGame;changes.push(i)}});
+    const count=slotsFor(jobs).length;
+    if(count>n||(current<=n&&count<=current))continue;
+    if(!best||count>best.count||(count===best.count&&changes.length<best.changes.length))best={jobs,changes,count};
+  }
+  return best;
+}
+/* teams */
+function renderTeams(){
+  $('teamSel').innerHTML=G.teams.map(t=>`<option value="${t.id}" ${t.id===S.id?'selected':''}>${esc(t.name)}</option>`).join('')+'<option value="__new">+ Add a team</option>';
+  $('teamName').value=S.name;
+}
+$('teamSel').onchange=e=>{
+  if(e.target.value==='__new'){$('newTeamRow').classList.remove('hidden');$('teamSel').parentElement.classList.add('hidden');$('newTeamName').focus();return}
+  S=G.teams.find(t=>t.id===e.target.value);G.active=S.id;current=null;save();render();
+  document.querySelector(`nav [data-tab="${S.draw?'draw':'team'}"]`).click();
+};
+function closeNew(){$('newTeamRow').classList.add('hidden');$('teamSel').parentElement.classList.remove('hidden');$('newTeamName').value='';renderTeams()}
+$('newTeamSave').onclick=()=>{const n=$('newTeamName').value.trim();if(!n)return $('newTeamName').focus();
+  S=blankTeam(n);G.teams.push(S);G.active=S.id;current=null;save();closeNew();render();document.querySelector('nav [data-tab="team"]').click()};
+$('newTeamName').onkeydown=e=>{if(e.key==='Enter')$('newTeamSave').click()};
+$('newTeamCancel').onclick=closeNew;
+$('teamName').onchange=()=>{S.name=$('teamName').value.trim()||'Team';save();renderTeams()};
+$('clearRoster').onclick=e=>confirmTap(e.currentTarget,'Tap again to clear',()=>{S.roster=[];S.preset={};S.draw=null;current=null;save();render()});
+$('delTeam').onclick=e=>confirmTap(e.currentTarget,'Tap again to delete',()=>{
+  G.teams=G.teams.filter(t=>t!==S);if(!G.teams.length)G.teams.push(blankTeam('My Team'));S=G.teams[0];G.active=S.id;current=null;save();render();document.querySelector('nav [data-tab="team"]').click()});
+/* roster */
+function renderRoster(){
+  const sorted=[...S.roster].sort((a,b)=>a.num-b.num);
+  $('roster').innerHTML=sorted.length?sorted.map(p=>`<li class="${p.here?'':'absent'}"><span class="jersey">${esc(p.num)}</span><span class="name">${esc(p.name)}</span>
+    <label class="toggle"><input type="checkbox" data-here="${p.id}" ${p.here?'checked':''}>Here</label><button class="x" data-del="${p.id}" aria-label="Remove ${esc(p.name)}">×</button></li>`).join('')
+    :'<li class="empty">Add your players above.</li>';
+  $('roster').querySelectorAll('[data-here]').forEach(c=>c.onchange=()=>{S.roster.find(p=>p.id===c.dataset.here).here=c.checked;save();renderRoster()});
+  $('roster').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>confirmTap(b,'Remove?',()=>{S.roster=S.roster.filter(x=>x.id!==b.dataset.del);save();renderRoster()}));
+}
+$('addBtn').onclick=()=>{
+  const name=$('newName').value.trim(),num=$('newNum').value.trim();
+  if(!name)return $('newName').focus();
+  S.roster.push({id:crypto.randomUUID(),num:num||'–',name,here:true});
+  $('newName').value='';$('newNum').value='';save();renderRoster();$('newNum').focus();
+};
+$('newName').onkeydown=e=>{if(e.key==='Enter')$('addBtn').click()};
+
+/* jobs */
+function renderJobs(){
+  $('gOut').textContent=S.games;
+  $('jobList').innerHTML=S.jobs.map((j,i)=>`<div class="jobrow"><input class="jl" data-i="${i}" value="${esc(j.label)}" aria-label="Job name">
+    <button class="mode" data-mode="${i}">${j.perGame?'Each set':'Whole match'}</button><div class="step"><button data-m="${i}">−</button><output>${j.count}</output><button data-p="${i}">+</button></div></div>`).join('');
+  $('jobList').querySelectorAll('.jl').forEach(inp=>inp.onchange=()=>{S.jobs[inp.dataset.i].label=inp.value.trim()||'Job';save()});
+  $('jobList').querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const j=S.jobs[b.dataset.m];j.count--;if(j.count<=0)S.jobs.splice(b.dataset.m,1);save();renderJobs()});
+  $('jobList').querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{const j=S.jobs[b.dataset.mode];j.perGame=!j.perGame;save();renderJobs()});
+  $('jobList').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{S.jobs[b.dataset.p].count=Math.min(6,S.jobs[b.dataset.p].count+1);save();renderJobs()});
+}
+$('gM').onclick=()=>{S.games=Math.max(1,S.games-1);save();renderJobs()};
+$('gP').onclick=()=>{S.games=Math.min(5,S.games+1);save();renderJobs()};
+$('addJob').onclick=()=>{S.jobs.push({id:crypto.randomUUID(),label:'New job',count:1,perGame:false});save();renderJobs()};
+$('resetJobs').onclick=()=>{S.jobs=freshJobs();S.preset={};save();renderJobs()};
+
+/* draw */
+function renderDraw(){
+  const d=S.draw;
+  $('startBox').classList.toggle('hidden',!!d);
+  if(!d){
+    const n=here().length,specs=slotSpecs(S.jobs),jobs=specs.length,t=$('tally');
+    t.classList.toggle('warn',jobs>n||n===0);
+    const suggestion=suggestFit(n);
+    t.textContent=n===0?'Add players on the Team tab first.':jobs>n?`${jobs} assignments but only ${n} players here. ${suggestion?'Use the suggested setup below or adjust jobs.':'Adjust jobs on the Jobs tab or add players.'}`
+      :`${n} players here, ${jobs} working, ${n-jobs} off.`;
+    $('fitSuggestion').classList.toggle('hidden',!suggestion);
+    if(suggestion){
+      const detail=suggestion.changes.map(i=>`${S.jobs[i].label} → ${suggestion.jobs[i].perGame?'Each set':'Whole match'}`).join('; ');
+      $('fitText').textContent=`Suggested setup: ${detail}. ${suggestion.count} working, ${n-suggestion.count} off. You can change any job afterward.`;
+    }
+    $('startBtn').disabled=jobs>n||n===0;
+    const hp=here();syncPresets(specs,hp);
+    $('presetBox').innerHTML=specs.map(s=>{const taken=new Set(Object.entries(S.preset).filter(([key])=>key!==s.key).map(([,v])=>v));
+      return `<div class="prow"><span>${esc(s.display)}</span><select data-key="${esc(s.key)}" class="${S.preset[s.key]?'set':''}"><option value="">Random</option>${
+      hp.filter(p=>!taken.has(p.id)).sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}" ${S.preset[s.key]===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>`}).join('');
+    $('presetBox').querySelectorAll('select').forEach(sel=>sel.onchange=()=>{if(sel.value)S.preset[sel.dataset.key]=sel.value;else delete S.preset[sel.dataset.key];save();renderDraw()});
+    const offLast=S.last?hp.filter(p=>S.last[p.id]==='Off'):[];
+    $('mixBox').classList.toggle('hidden',!S.last);
+    $('mixToggle').checked=S.mix!==false;
+    $('mixHint').textContent=(offLast.length?`${offLast.map(p=>p.name).join(', ')} ${offLast.length>1?'were':'was'} off last match and will get a job this time. `:'')+'Nobody gets the same job twice in a row when it can be avoided.';
+    ['pickName','pickNum','results'].forEach(id=>$(id).classList.add('hidden'));
+    $('promo').classList.add('hidden');
+    return;
+  }
+  $('fitSuggestion').classList.add('hidden');
+  migrate(d);
+  const left=d.players.filter(p=>!d.jobs[p.id]);
+  const done=left.length===0;
+  $('pickName').classList.toggle('hidden',done||!!current);
+  $('pickNum').classList.toggle('hidden',done||!current);
+  $('results').classList.toggle('hidden',!done&&!!current);
+  $('promo').classList.toggle('hidden',!done);
+  const last=d.order.length?d.players.find(p=>p.id===d.order[d.order.length-1]):null;
+  ['undoBtn1','undoBtn2'].forEach(id=>{const b=$(id);b.classList.toggle('hidden',!last);if(!b.dataset.armed)b.textContent=last?`Undo ${last.name}'s pick`:'Undo last pick'});
+  $('nameGrid').innerHTML=left.map(p=>`<button class="pick" data-id="${p.id}"><span class="jersey">${esc(p.num)}</span>${esc(p.name)}</button>`).join('');
+  $('nameGrid').querySelectorAll('.pick').forEach(b=>b.onclick=()=>{current=d.players.find(p=>p.id===b.dataset.id);renderDraw();window.scrollTo(0,0)});
+  if(current){
+    $('whoNum').textContent=current.num;$('whoName').textContent=current.name;
+    const used=new Set(Object.values(d.picks));
+    $('numGrid').innerHTML=[...Array(d.count)].map((_,i)=>i+1).filter(n=>!used.has(n)).map(n=>`<button class="num" data-n="${n}">${n}</button>`).join('');
+    $('numGrid').querySelectorAll('.num').forEach(b=>b.onclick=()=>pick(+b.dataset.n));
+  }
+  renderResults();
+}
+function migrate(d){ // draws started in an older version
+  if(d.pool)return;
+  d.fixed=d.fixed||{};d.jobs={...d.fixed};d.order=[];
+  Object.entries(d.picks).forEach(([id,n])=>{d.jobs[id]=d.slots[n-1];d.order.push(id)});
+  const pool=[...d.slots];Object.values(d.picks).forEach(n=>pool.splice(pool.indexOf(d.slots[n-1]),1));
+  d.pool=pool;d.count=d.slots.length;d.must=[];d.prev=null;save();
+}
+const base=l=>l.replace(/ – (?:Game|Set) \d+$/,'');
+// The job is drawn at random the moment a number is tapped, within the fairness rules.
+function drawJob(d,p){
+  const unpicked=d.players.filter(x=>!d.jobs[x.id]&&x.id!==p.id);
+  const mustLeft=unpicked.filter(x=>d.must.includes(x.id)).length;
+  const work=d.pool.filter(l=>l!=='Off'),off=d.pool.filter(l=>l==='Off');
+  let options;
+  if(d.must.includes(p.id)&&work.length)options=work;
+  else options=(work.length-1>=mustLeft)?[...work,...off]:(off.length?off:work);
+  if(d.prev&&d.prev[p.id]){ // avoid the same job as last match when possible
+    const lastBase=base(d.prev[p.id]),fresh=options.filter(l=>base(l)!==lastBase);
+    if(fresh.length)options=fresh;
+  }
+  return options[rnd(options.length)];
+}
+function pick(n){
+  const d=S.draw,job=drawJob(d,current);
+  d.pool.splice(d.pool.indexOf(job),1);
+  d.picks[current.id]=n;d.jobs[current.id]=job;d.order.push(current.id);
+  if(d.players.every(p=>d.jobs[p.id]))S.last={...d.jobs};
+  save();
+  $('dWho').textContent=`${current.name} picked #${n}`;
+  $('dJob').textContent=job;
+  $('dlg').showModal();
+}
+function undo(){
+  const d=S.draw,id=d.order.pop();if(!id)return;
+  d.pool.push(d.jobs[id]);delete d.jobs[id];delete d.picks[id];
+  S.last=d.prev;current=null;save();renderDraw();
+}
+$('undoBtn1').onclick=e=>confirmTap(e.currentTarget,'Tap again to undo',undo);
+$('undoBtn2').onclick=e=>confirmTap(e.currentTarget,'Tap again to undo',undo);
+$('dOk').onclick=()=>{$('dlg').close();current=null;renderDraw()};
+$('backBtn').onclick=()=>{current=null;renderDraw()};
+$('mixToggle').onchange=e=>{S.mix=e.target.checked;save()};
+$('applyFit').onclick=()=>{const suggestion=suggestFit(here().length);if(!suggestion)return;S.jobs=suggestion.jobs;save();render()};
+$('startBtn').onclick=()=>{
+  const all=here(),specs=slotSpecs(S.jobs),pool=specs.map(s=>s.label),fixed={};
+  Object.entries(S.preset).forEach(([key,id])=>{const slot=specs.find(s=>s.key===key),i=slot?pool.indexOf(slot.label):-1;if(i>-1){pool.splice(i,1);fixed[id]=slot.label}});
+  const players=all.filter(p=>!fixed[p.id]);
+  while(pool.length<players.length)pool.push('Off');
+  const useMix=!!(S.last&&S.mix!==false);
+  let must=[];
+  if(useMix){ // girls who were off last match (and are drawing now) must work, as many as there are jobs
+    const work=pool.filter(l=>l!=='Off').length;
+    must=shuffle(players.filter(p=>S.last[p.id]==='Off').map(p=>p.id)).slice(0,work);
+  }
+  S.draw={players:all.map(p=>({id:p.id,num:p.num,name:p.name})),pool,count:players.length,picks:{},jobs:{...fixed},fixed,order:[],must,prev:useMix?S.last:null};
+  current=null;save();renderDraw();
+};
+$('newDraw').onclick=e=>confirmTap(e.currentTarget,'Tap again to clear this draw',()=>{S.draw=null;S.preset={};current=null;save();renderDraw();window.scrollTo(0,0)});
+function scheduleGroups(){
+  const d=S.draw;
+  const order=[...slotsFor(S.jobs.map(j=>({...j,perGame:true}))),...S.jobs.map(j=>j.label),'Off'];
+  const rows=d.players.filter(p=>d.jobs[p.id]).map(p=>({p,n:d.picks[p.id]||0,job:d.jobs[p.id]}));
+  const groups=[...new Set([...order,...rows.map(r=>r.job)])].filter(g=>rows.some(r=>r.job===g));
+  return groups.map(g=>({g,rows:rows.filter(r=>r.job===g)}));
+}
+function renderResults(){
+  const d=S.draw;if(!d)return;migrate(d);
+  const waiting=d.players.filter(p=>!d.jobs[p.id]).length;
+  $('resultList').innerHTML=(waiting?`<p class="hint">${waiting} still to pick.</p>`:'')+
+    scheduleGroups().map(({g,rows})=>`<h3>${esc(g)}</h3><ul>${rows.map(r=>`<li><b>${esc(r.p.name)}</b><span>${r.n?'picked #'+r.n:'coach pick'}</span></li>`).join('')}</ul>`).join('');
+}
+$('shareSched').onclick=async e=>{
+  const b=e.currentTarget,orig=b.textContent;
+  const text=`🏐 ${S.name} – Work Team\n\n`+scheduleGroups().map(({g,rows})=>`${g}: ${rows.map(r=>r.p.name).join(', ')}`).join('\n')+
+    `\n\nMade with the free Volleyball Work Team Randomizer from Storm Volleyball: ccstormvolleyball.com/workteam`;
+  try{if(navigator.share){await navigator.share({text});return}}catch(err){if(err.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(text);b.textContent='Copied! Paste it in your team chat.'}catch(err){b.textContent='Couldn’t copy. Try a screenshot.'}
+  setTimeout(()=>b.textContent=orig,4000);
+};
+
+const SHARE_URL='https://www.ccstormvolleyball.com/workteam?utm_source=workteam&utm_medium=app&utm_campaign=share';
+$('shareBtn').onclick=async e=>{
+  const b=e.currentTarget,msg='Free app for randomly assigning work-team jobs (lines, book, flip, libero) at volleyball tournaments:';
+  try{if(navigator.share){await navigator.share({title:'Volleyball Work Team Randomizer',text:msg,url:SHARE_URL});return}}catch(err){if(err.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(msg+' '+SHARE_URL);b.textContent='Link copied! Paste it in a text.'}catch(err){b.textContent=SHARE_URL}
+  setTimeout(()=>b.textContent='Share the Randomizer with another coach',4000);
+};
+function render(){renderTeams();renderRoster();renderJobs();renderDraw()}
+render();
+// open on Draw if one is in progress, otherwise start at Team
+document.querySelector(`nav [data-tab="${S.draw?'draw':'team'}"]`).click();
+</script>
+</body>
+</html>
